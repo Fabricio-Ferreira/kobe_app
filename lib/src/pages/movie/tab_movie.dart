@@ -14,22 +14,32 @@ class TabMovies extends StatefulWidget {
 
 class _TabMoviesState extends State<TabMovies>
     with AutomaticKeepAliveClientMixin<TabMovies> {
-
   @override
   bool get wantKeepAlive => true;
 
   final bloc = BlocProvider.getBloc<MoviesBloc>();
+
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
 
     bloc.fetch();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        bloc.fetchMore();
+      }
+    });
   }
 
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
+    List<Movie> list = [];
+
     return StreamBuilder(
       stream: bloc.stream,
       builder: (context, snapshot) {
@@ -51,22 +61,29 @@ class _TabMoviesState extends State<TabMovies>
 
         List<Movie> movies = snapshot.data;
 
+        list.addAll(movies);
+
+        print(list);
+
         return movies.isEmpty
             ? TextEmpty("Nenhum filme.")
-            : _griView(movies, context);
+            : _griView(context, list);
       },
     );
   }
 
-  _griView(List<Movie> movies, context) {
+  // JU236342055BR
+
+  _griView(context, list) {
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: GridView.builder(
+        controller: _scrollController,
         gridDelegate:
-        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemCount: movies.length,
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemCount: list.length,
         itemBuilder: (context, index) {
-          return _item(movies, index, context);
+          return _item(list, index, context);
         },
       ),
     );
