@@ -1,23 +1,72 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:kobe_app/src/pages/favorites/favorite_bloc.dart';
+import 'package:kobe_app/src/pages/favorites/tab_favorite.dart';
+import 'package:kobe_app/src/pages/home/drawner.dart';
+import 'package:kobe_app/src/pages/movie/movies_bloc.dart';
+import 'package:kobe_app/src/pages/movie/tab_movie.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin<HomePage> {
+  TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tabController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Kobe Movies",
-          style: TextStyle(color: Colors.blue),
+    return BlocProvider(
+      blocs: [
+        Bloc((i) => MoviesBloc()),
+        Bloc((i) => FavoritosBloc()),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          title: Text("Kobe Filmes App"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: _onClickLogout,
+            )
+          ],
+          bottom: TabBar(
+            controller: tabController,
+            tabs: [
+              Tab(
+                text: "Filmes",
+                icon: Icon(Icons.movie),
+              ),
+              Tab(
+                text: "Favoritos",
+                icon: Icon(Icons.favorite),
+              )
+            ],
+          ),
         ),
-        backgroundColor: Colors.grey[400],
-      ),
-      body: Column(
-        children: <Widget>[],
+        body: TabBarView(
+          controller: tabController,
+          children: [
+            TabMovies(),
+            TabFavoritos(),
+          ],
+        ),
+        drawer: DrawerMenu(),
       ),
     );
+  }
+
+  _onClickLogout() {
+    //pushReplacement(context, LoginPage());
+    print("Você clicou em sair");
   }
 }
