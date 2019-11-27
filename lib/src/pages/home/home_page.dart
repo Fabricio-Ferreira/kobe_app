@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage>
           title: Text("Kobe Filmes App"),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.exit_to_app),
+              icon: Icon(Icons.search),
               onPressed: _onClickLogout,
             )
           ],
