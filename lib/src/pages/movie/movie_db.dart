@@ -31,7 +31,10 @@ class MovieDB {
 
   void _onCreate(Database db, int newVersion) async {
     await db.execute(
-        'CREATE TABLE movie(id INTEGER PRIMARY KEY, title TEXT, tagline TEXT, poster_path TEXT, vote_average TEXT, overview TEXT, release_date TEXT, homepage TEXT, popularity TEXT, original_title TEXT, original_language TEXT, vote_count TEXT, video BOOL)');
+        'CREATE TABLE movie(id INTEGER PRIMARY KEY, title TEXT, poster_path TEXT, '
+            'vote_average TEXT, overview TEXT, release_date TEXT, backdrop_path TEXT,'
+            ' popularity TEXT, original_title TEXT, original_language TEXT, vote_count TEXT, video BOOL,'
+            'adult BOOL)');
   }
 
   Future<int> saveMovie(Movie movie) async {
