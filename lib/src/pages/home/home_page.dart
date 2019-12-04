@@ -1,10 +1,13 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:kobe_app/src/delegates/data_search.dart';
 import 'package:kobe_app/src/pages/favorites/favorite_bloc.dart';
 import 'package:kobe_app/src/pages/favorites/tab_favorite.dart';
 import 'package:kobe_app/src/pages/home/drawner.dart';
+import 'package:kobe_app/src/pages/movie/movie_page.dart';
 import 'package:kobe_app/src/pages/movie/movies_bloc.dart';
 import 'package:kobe_app/src/pages/movie/tab_movie.dart';
+import 'package:kobe_app/src/shared/nav.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -36,7 +39,11 @@ class _HomePageState extends State<HomePage>
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: _onClickLogout,
+              onPressed: () async {
+                String result = await showSearch(context: context, delegate: DataSearch());
+                print(result);
+                //push(context, MoviePage(result));
+              },
             )
           ],
           bottom: TabBar(
@@ -63,10 +70,5 @@ class _HomePageState extends State<HomePage>
         drawer: DrawerMenu(),
       ),
     );
-  }
-
-  _onClickLogout() {
-    //pushReplacement(context, LoginPage());
-    print("Você clicou em sair");
   }
 }

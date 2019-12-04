@@ -63,16 +63,12 @@ class _TabMoviesState extends State<TabMovies>
 
         list.addAll(movies);
 
-        print(list);
-
         return movies.isEmpty
             ? TextEmpty("Nenhum filme.")
             : _griView(context, list);
       },
     );
   }
-
-  // JU236342055BR
 
   _griView(context, list) {
     return RefreshIndicator(
